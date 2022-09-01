@@ -1,12 +1,27 @@
 // Modules and Globals
 require("dotenv").config()
 const express = require("express")
+
 const bodyParser = require("body-parser")
 const cors = require("cors")
+const cookieSession = require("cookie-session")
 const app = express()
 
+app.use(
+  cookieSession({
+    name: "session",
+    keys: [process.env.SESSION_SECRET],
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+  })
+)
+
 // Express Settings
-app.use(cors())
+app.use(
+  cors({
+    origin: "http://localhost:3001",
+    credentials: true,
+  })
+)
 app.use(express.static("public"))
 app.use(express.urlencoded({ extended: true }))
 app.use(bodyParser.json())
